@@ -95,7 +95,7 @@ function createEmployeeForm(container) {
   form.classList.add('new-employee-form');
   // body.appendChild(form);
 
-  const createLabelInput = (labelText, type = 'text', name = '') => {
+  const createLabelInput = (labelText, type = 'text', userName = '') => {
     const label = document.createElement('label');
 
     label.textContent = labelText;
@@ -103,7 +103,7 @@ function createEmployeeForm(container) {
     const input = document.createElement('input');
 
     input.type = type;
-    input.name = name;
+    input.name = userName;
     input.required = true;
     input.setAttribute('data-qa', name);
 
@@ -113,10 +113,10 @@ function createEmployeeForm(container) {
     return input;
   };
 
-  const inputName = createLabelInput('Name:', 'text', 'name');
-  const inputPosition = createLabelInput('Position', 'text', 'position');
-  const inputAge = createLabelInput('Age', 'number', 'age');
-  const inputSalary = createLabelInput('Salary', 'number', 'salary');
+  createLabelInput('Name:', 'text', 'name');
+  createLabelInput('Position', 'text', 'position');
+  createLabelInput('Age', 'number', 'age');
+  createLabelInput('Salary', 'number', 'salary');
 
   const labelOffice = document.createElement('label');
 
@@ -163,13 +163,13 @@ function setupFormHandler(form, table) {
     e.preventDefault();
 
     const formData = new FormData(form);
-    const name = formData.get('name')?.trim();
+    const empName = formData.get('name')?.trim();
     const position = formData.get('position');
     const office = formData.get('office');
     const age = Number(formData.get('age'));
     const salary = Number(formData.get('salary'));
 
-    if (name.length < 4) {
+    if (empName.length < 4) {
       showNotification('Name must be at least 4 characters long', 'error');
 
       return;
@@ -194,7 +194,7 @@ function setupFormHandler(form, table) {
     const row = tbody.insertRow();
 
     [
-      name,
+      empName,
       position,
       office,
       age,
@@ -221,6 +221,8 @@ function setupFormHandler(form, table) {
     note.setAttribute('data-qa', 'notification');
     note.className = type === 'error' ? 'error' : 'success';
     note.textContent = message;
+
+    form.insertBefore(note, form.querySelector('button'));
 
     setTimeout(() => note.remove(), 3000);
   }
